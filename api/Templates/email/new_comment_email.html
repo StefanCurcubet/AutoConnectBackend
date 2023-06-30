@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AutoConnect</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@300&display=swap');
+        table {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border-spacing: 0;
+            font-family: 'Lato', sans-serif;
+        }
+        .container {
+            text-align: center;
+            padding: 0;
+        }
+        .sub-container{
+            border-left-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+            border-width: thin;
+            text-align: center;
+            padding-bottom: 1rem;
+        }
+        .header {
+            background: #ced4da;
+            padding: 1rem;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td class="container">
+                <h3 class="header">AutoConnect</h3>
+            </td>
+        </tr>
+        <tr>
+            <td class="sub-container">
+                <p>You have a new comment on <bold>{{ post_title}} from {{comment_from}}</bold>.</p>
+                <a href="http://localhost:3000/viewListing/{{post_id}}">View Post</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
