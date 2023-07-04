@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .models import Post, UserExtra, Comment, Conversation, Message, Rating, SellerRating, Pin
+from .models import Post, UserExtra, Comment, Conversation, Message, Rating, SellerRating, Pin, PasswordReset
 from .serializers import PostSerializer, UserExtraSerializer, CommentSerializer, ConversationSerializer, \
     MessageSerializer, UserSerializer, SellerRatingSerializer
 from django.contrib.auth.models import User
@@ -402,3 +402,60 @@ def verifyPin(request, pk):
         pin.delete()
         return Response(True)
     return Response(False)
+
+
+@api_view(['POST'])
+def createReset(request):
+    chars = 'abcdefghijklmnopqrstuvwxyz'
+    generated_code = ''
+    for _ in range(0, 24):
+        if random.randint(0, 1) == 0:
+            generated_code += str(random.randint(0, 9))
+        else:
+            generated_code += chars[random.randint(0, 25)]
+    try:
+        if '@' in request.data:
+            user = User.objects.get(email=request.data)
+        else:
+            user = User.objects.get(username=request.data)
+
+        new_reset = PasswordReset.objects.create(
+            user=user,
+            code=generated_code,
+        )
+
+        context = {
+            'code': new_reset.code
+        }
+        subject = 'Password Reset'
+        message = f'Go to http://localhost:3000/reset/{new_reset.code}'
+        from_email = 'autoconnectmailer@gmail.com'
+        recipient = user.email
+        html_message = render_to_string('email/password_reset_email.html', context)
+        send_mail(subject, message, from_email, recipient_list=[recipient], html_message=html_message)
+
+        return Response({'message': 'Success, reset email sent'})
+    except User.DoesNotExist:
+        return Response({'message': 'Invalid credentials'})
+
+
+@api_view(['PUT'])
+def resetPassword(request, reset_code):
+    password_reset = PasswordReset.objects.get(code=reset_code)
+    user = User.objects.get(username=password_reset.user)
+    hashed_password = make_password(request.data)
+    user.password = hashed_password
+    user.save()
+    password_reset.delete()
+    return Response({'message': 'Password Updated'})
+
+
+@api_view(['GET'])
+def checkReset(request, reset_code):
+    expired_resets = PasswordReset.objects.filter(created_at__lt=(timezone.now() - timedelta(minutes=5)))
+    expired_resets.delete()
+    try:
+        password_reset = PasswordReset.objects.get(code=reset_code)
+        return Response(True)
+    except PasswordReset.DoesNotExist:
+        return Response(False)

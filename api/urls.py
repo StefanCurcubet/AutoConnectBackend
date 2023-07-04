@@ -58,7 +58,12 @@ urlpatterns = [
     # Create verification PIN
     path('createPin/', views.createPin),
     # Verify PIN received in email
-    path('verifyPin/<int:pk>', views.verifyPin)
+    path('verifyPin/<int:pk>', views.verifyPin),
+
+    # Create password reset Mail
+    path('createReset/', views.createReset),
+    path('checkReset/<str:reset_code>', views.checkReset),
+    path('resetPassword/<str:reset_code>', views.resetPassword),
 ]
 
 

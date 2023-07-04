@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Post, UserExtra, Comment, Conversation, Message, Rating, SellerRating, Pin
+from .models import Post, UserExtra, Comment, Conversation, Message, Rating, SellerRating, Pin, PasswordReset
 
 admin.site.register(Post)
 admin.site.register(UserExtra)
@@ -12,3 +12,4 @@ admin.site.register(Message)
 admin.site.register(Rating)
 admin.site.register(SellerRating)
 admin.site.register(Pin)
+admin.site.register(PasswordReset)

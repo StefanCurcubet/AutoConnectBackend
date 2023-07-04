@@ -128,3 +128,12 @@ class Pin(models.Model):
     def __str__(self):
         return self.user.user.username
 
+
+class PasswordReset(models.Model):
+    user = models.CharField(null=True, blank=True, max_length=25)
+    code = models.CharField(null=True, blank=True, max_length=25)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user
+
