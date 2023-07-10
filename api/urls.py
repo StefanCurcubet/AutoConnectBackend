@@ -24,6 +24,8 @@ urlpatterns = [
 
     # Create a new user
     path('newUser/', views.createUser),
+    # Delete an existing user
+    path('deleteUser/', views.deleteUser),
     # Toggle a listing in a users favourites list
     path('toggleFavourite/<int:pk>', views.toggle_favourite),
     # Get a users favourited posts

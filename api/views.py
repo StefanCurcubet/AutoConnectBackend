@@ -113,6 +113,15 @@ def createUser(request):
     return Response({'message': 'Account created'})
 
 
+@api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def deleteUser(request):
+    user = request.user
+    user.delete()
+    return Response({'message': 'User deleted'})
+
+
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
