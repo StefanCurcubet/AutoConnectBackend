@@ -1,6 +1,8 @@
 from django.urls import path
-from . import views
-from .views import MyTokenObtainPairView
+from .Views.MessagingViews import views as messaging_views
+from .Views.PostViews import views as post_views
+from .Views.UserViews import views as user_views
+from .Views.UserViews.views import MyTokenObtainPairView
 from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
@@ -8,64 +10,64 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     # Get all listings
-    path('getAllPosts/<str:order>', views.getAllPosts),
+    path('getAllPosts/<str:order>', post_views.getAllPosts),
     # Create a new listing
-    path('newListing/', views.createPost),
+    path('newPost/', post_views.createPost),
     # Delete a listing
-    path('deleteListing/<int:pk>', views.deletePost),
+    path('deletePost/<int:pk>', post_views.deletePost),
     # View a listing
-    path('getListing/<int:pk>', views.viewPost),
+    path('getPost/<int:pk>', post_views.viewPost),
     # Rate a listing
-    path('rateListing/<int:pk>/<int:rating>', views.ratePost),
+    path('ratePost/<int:pk>/<int:rating>', post_views.ratePost),
     # Get comments for a listing
-    path('getComments/<int:pk>', views.getComments),
+    path('getComments/<int:pk>', post_views.getComments),
     # Post comment to listing
-    path('addComment/<int:pk>', views.addComment),
+    path('addComment/<int:pk>', post_views.addComment),
 
     # Create a new user
-    path('newUser/', views.createUser),
+    path('newUser/', user_views.createUser),
     # Delete an existing user
-    path('deleteUser/', views.deleteUser),
+    path('deleteUser/', user_views.deleteUser),
     # Toggle a listing in a users favourites list
-    path('toggleFavourite/<int:pk>', views.toggle_favourite),
+    path('toggleFavourite/<int:pk>', user_views.toggle_favourite),
     # Get a users favourited posts
-    path('getFavourites/', views.get_favourites),
+    path('getFavourites/', user_views.get_favourites),
     # Get settings for logged user
-    path('getSettings', views.getUserSettings),
+    path('getSettings', user_views.getUserSettings),
     # Modify settings for logged user
-    path('updateSettings', views.updateUserSettings),
+    path('updateSettings', user_views.updateUserSettings),
 
     # JWT token urls for issuing and refreshing a token
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    # Start a conversation with another user
-    path('newConversation/<str:pk>', views.createConversation),
-    # Get all conversations for the logged user
-    path('getConversations/', views.getConversations),
-    # Get messages for the selected conversation
-    path('getMessages/<int:pk>', views.getMessages),
-    # Post a new message to the selected conversation
-    path('addMessage/<int:pk>', views.addMessage),
-
     # View a sellers info
-    path('getSeller/<str:pk>', views.getSeller),
+    path('getSeller/<str:pk>', user_views.getSeller),
     # Rate the seller
-    path('rateSeller/<str:pk>/<int:rating>', views.rateSeller),
+    path('rateSeller/<str:pk>/<int:rating>', user_views.rateSeller),
     # Get the current rating for all sellers
-    path('getAllSellerRatings/', views.getAllSellerRatings),
+    path('getAllSellerRatings/', user_views.getAllSellerRatings),
     # GEt the current rating for a selected seller
-    path('getSellerRating/<str:pk>', views.getSellerRating),
+    path('getSellerRating/<str:pk>', user_views.getSellerRating),
 
     # Create verification PIN
-    path('createPin/', views.createPin),
+    path('createPin/', user_views.createPin),
     # Verify PIN received in email
-    path('verifyPin/<int:pk>', views.verifyPin),
+    path('verifyPin/<int:pk>', user_views.verifyPin),
 
     # Create password reset Mail
-    path('createReset/', views.createReset),
-    path('checkReset/<str:reset_code>', views.checkReset),
-    path('resetPassword/<str:reset_code>', views.resetPassword),
+    path('createReset/', user_views.createReset),
+    path('checkReset/<str:reset_code>', user_views.checkReset),
+    path('resetPassword/<str:reset_code>', user_views.resetPassword),
+
+    # Start a conversation with another user
+    path('newConversation/<str:pk>', messaging_views.createConversation),
+    # Get all conversations for the logged user
+    path('getConversations/', messaging_views.getConversations),
+    # Get messages for the selected conversation
+    path('getMessages/<int:pk>', messaging_views.getMessages),
+    # Post a new message to the selected conversation
+    path('addMessage/<int:pk>', messaging_views.addMessage),
 ]
 
 
