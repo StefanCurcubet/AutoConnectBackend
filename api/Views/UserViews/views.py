@@ -271,7 +271,7 @@ def checkReset(request, reset_code):
     expired_resets = PasswordReset.objects.filter(created_at__lt=(timezone.now() - timedelta(minutes=5)))
     expired_resets.delete()
     try:
-        password_reset = PasswordReset.objects.get(code=reset_code)
+        PasswordReset.objects.get(code=reset_code)
         return Response(True)
     except PasswordReset.DoesNotExist:
         return Response(False)

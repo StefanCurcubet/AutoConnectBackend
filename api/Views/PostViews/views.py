@@ -24,7 +24,7 @@ def getAllPosts(request, order):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def createPost(request):
-    data = request.data['listingData']
+    data = request.data['postData']
     new_post = Post.objects.create(
         title=data['title'],
         imageUrl=data['imageUrl'],
@@ -109,7 +109,7 @@ def addComment(request, pk):
     }
     subject = f'Comment received on {post.title} from {request.user}'
     from_email = 'autoconnectmailer@gmail.com'
-    message = f'Follow the link to view post http://localhost:3000/viewListing/{pk}'
+    message = f'Follow the link to view post http://localhost:3000/viewPost/{pk}'
     html_message = render_to_string('email/new_comment_email.html', context)
     if author.userextra.notify_by_mail_comment and post.author != request.user.username:
         send_mail(subject, message, from_email, recipient_list=[author.email], html_message=html_message)
